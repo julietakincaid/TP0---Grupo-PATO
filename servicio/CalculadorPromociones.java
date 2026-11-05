@@ -1,9 +1,5 @@
-package modelo;
+package servicio;
 
 public interface CalculadorPromociones {
-
-    double calcularMejorDescuento(
-            Reserva reserva,
-            double subtotal
-    );
+    double obtenerMejorDescuento(int cantidadPasajeros, int diasAnticipacion);
 }
