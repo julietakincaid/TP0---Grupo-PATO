@@ -1,25 +1,12 @@
-
-package modelo;
+package servicio;
 
 public abstract class Promocion {
-
     private String nombre;
     private double porcentajeDescuento;
 
     public Promocion(String nombre, double porcentajeDescuento) {
-        if (nombre == null || nombre.isBlank()) {
-            throw new IllegalArgumentException(
-                "El nombre de la promocion es obligatorio."
-            );
-        }
-        if (porcentajeDescuento < 0 || porcentajeDescuento > 1) {
-            throw new IllegalArgumentException(
-                "El descuento debe estar entre 0 y 1."
-            );
-        }
-
         this.nombre = nombre;
-        this.porcentajeDescuento = porcentajeDescuento;
+        setPorcentajeDescuento(porcentajeDescuento);
     }
 
     public String getNombre() {
@@ -30,14 +17,18 @@ public abstract class Promocion {
         return porcentajeDescuento;
     }
 
-    public abstract boolean esAplicable(Reserva reserva);
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-    public double calcularDescuento(double importe) {
-        if (importe < 0) {
+    public void setPorcentajeDescuento(double porcentajeDescuento) {
+        if (porcentajeDescuento < 0 || porcentajeDescuento > 100) {
             throw new IllegalArgumentException(
-                "El importe no puede ser negativo."
+                    "El porcentaje debe estar entre 0 y 100."
             );
         }
-        return importe * porcentajeDescuento;
+        this.porcentajeDescuento = porcentajeDescuento;
     }
+
+    public abstract boolean esAplicable(int cantidadPasajeros, int diasAnticipacion);
 }
