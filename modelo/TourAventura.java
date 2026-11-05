@@ -1,5 +1,6 @@
 package modelo;
 
+import java.time.LocalDate;
 import modelo.enums.CategoriaTour;
 
 public class TourAventura extends Tour{
@@ -31,7 +32,9 @@ public class TourAventura extends Tour{
         this.nivelDificultad = nivelDificultad;
     }
 
-    public boolean cumpleCondiciones(Pasajero pasajero) {
-        return pasajero.getEdad() >= edadMinima;
+
+    @Override
+    public boolean cumpleCondiciones(Pasajero pasajero, LocalDate fechaSalida) {
+        return pasajero.calcularEdad(fechaSalida) >= edadMinima;
     }
 }
