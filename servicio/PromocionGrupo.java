@@ -1,27 +1,12 @@
-
-package modelo;
+package servicio;
 
 public class PromocionGrupo extends Promocion {
-
-    private int cantidadMinimaPasajeros;
-
     public PromocionGrupo() {
-        super("Promocion por grupo", 0.10);
-        this.cantidadMinimaPasajeros = 6;
+        super("Promocion grupal", 10);
     }
 
     @Override
-    public boolean esAplicable(Reserva reserva) {
-        if (reserva == null) {
-            throw new IllegalArgumentException(
-                "La reserva no puede ser nula."
-            );
-        }
-
-        return reserva.cantidadPasajeros() >= cantidadMinimaPasajeros;
-    }
-
-    public int getCantidadMinimaPasajeros() {
-        return cantidadMinimaPasajeros;
+    public boolean esAplicable(int cantidadPasajeros, int diasAnticipacion) {
+        return cantidadPasajeros >= 6;
     }
 }
