@@ -1,6 +1,9 @@
 package modelo;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import modelo.enums.EstadoReserva;
 import modelo.enums.EstadoSalida;
 
 public class Salida {
@@ -11,6 +14,7 @@ public class Salida {
     private int cupoMinimo;
     private int cupoMaximo;
     private Tour tour;
+    private final List<Reserva> reservas = new ArrayList<>();
 
     public Salida(int numero, LocalDate fechaInicio, LocalDate fechaFin, int cupoMinimo, int cupoMaximo, Tour tour) {
         setNumero(numero);
@@ -46,6 +50,26 @@ public class Salida {
 
     public Tour getTour() {
         return tour;
+    }
+
+
+    void agregarReserva(Reserva reserva) {
+        reservas.add(reserva);
+    }
+
+
+    public int calcularOcupacion() {
+        int ocupados = 0;
+        for (Reserva r : reservas) {
+            if (r.getEstado() != EstadoReserva.ANULADA) {
+                ocupados += r.cantidadPasajeros();
+            }
+        }
+        return ocupados;
+    }
+
+    public boolean verificarCupo(int cantidad) {
+        return calcularOcupacion() + cantidad <= cupoMaximo;
     }
 
     private void setNumero(int numero) {
