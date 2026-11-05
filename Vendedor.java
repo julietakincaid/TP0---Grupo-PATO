@@ -1,11 +1,16 @@
 package modelo;
 
-public class Vendedor extends Personal{
+public class Vendedor extends Personal {
     private double comision;
 
     public Vendedor(int legajo, String nombre, String documento, String telefono, double comision) {
         super(legajo, nombre, documento, telefono);
         setComision(comision);
+    }
+
+    @Override
+    public String getRol() {
+        return "Vendedor";
     }
 
     public double calcularComision(double ventas) {
