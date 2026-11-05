@@ -3,39 +3,63 @@ package modelo;
 import modelo.enums.TipoServicioAdicional;
 
 public class ServicioAdicional {
+    private int codigo;
     private String nombre;
-    private double precio;
+    private String descripcion;
     private TipoServicioAdicional tipo;
+    private double precio;
 
-    public ServicioAdicional(String nombre, double precio, TipoServicioAdicional tipo) {
-        if (nombre == null || nombre.isBlank()) {
-            throw new IllegalArgumentException("El nombre del servicio es obligatorio.");
-        }
-        if (precio < 0) {
-            throw new IllegalArgumentException("El precio no puede ser negativo.");
-        }
-        if (tipo == null) {
-            throw new IllegalArgumentException("El tipo de servicio es obligatorio.");
-        }
+    public ServicioAdicional(int codigo, String nombre, String descripcion, TipoServicioAdicional tipo, double precio) {
+        setCodigo(codigo);
         this.nombre = nombre;
-        this.precio = precio;
+        this.descripcion = descripcion;
         this.tipo = tipo;
+        setPrecio(precio);
     }
 
-    public double getPrecio() { return precio; }
-    public String getNombre() { return nombre; }
-    public TipoServicioAdicional getTipo() { return tipo; }
+    public int getCodigo() {
+        return codigo;
+    }
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public TipoServicioAdicional getTipo() {
+        return tipo;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    private void setCodigo(int codigo) {
+        if (codigo <= 0) {
+            throw new IllegalArgumentException("El codigo debe ser positivo.");
+        }
+        this.codigo = codigo;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public void setTipo(TipoServicioAdicional tipo) {
+        this.tipo = tipo;
+    }
 
     public void setPrecio(double precio) {
         if (precio < 0) {
             throw new IllegalArgumentException("El precio no puede ser negativo.");
         }
         this.precio = precio;
-    }
-
-    @Override
-    public String toString() {
-        return nombre + " (" + tipo + ") $" + precio;
     }
 }
