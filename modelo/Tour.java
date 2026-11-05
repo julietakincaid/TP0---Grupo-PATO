@@ -1,5 +1,7 @@
+
 package modelo;
 
+import java.time.LocalDate;
 import modelo.enums.CategoriaTour;
 
 public class Tour {
@@ -47,6 +49,11 @@ public class Tour {
 
     public int getCupoMaximo() {
         return cupoMaximo;
+    }
+
+
+    public boolean cumpleCondiciones(Pasajero pasajero, LocalDate fechaSalida) {
+        return true;
     }
 
     public void setNombre(String nombre) {
