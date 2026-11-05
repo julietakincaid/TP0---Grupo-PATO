@@ -1,21 +1,30 @@
 package modelo;
 
 public class ServicioContratado {
-    private final ServicioAdicional servicio;
-    private final double precioAplicado;
+    private ServicioAdicional servicioAdicional;
+    private double precioAplicado;
 
-    ServicioContratado(ServicioAdicional servicio) {
-        if (servicio == null) {
-            throw new IllegalArgumentException("El servicio adicional es obligatorio.");
+    public ServicioContratado(ServicioAdicional servicioAdicional, double precioAplicado) {
+        this.servicioAdicional = servicioAdicional;
+        setPrecioAplicado(precioAplicado);
+    }
+
+    public ServicioAdicional getServicioAdicional() {
+        return servicioAdicional;
+    }
+
+    public double getPrecioAplicado() {
+        return precioAplicado;
+    }
+
+    public void setPrecioAplicado(double precioAplicado) {
+        if (precioAplicado < 0) {
+            throw new IllegalArgumentException("El precio aplicado no puede ser negativo.");
         }
-        this.servicio = servicio;
-        this.precioAplicado = servicio.getPrecio();
+        this.precioAplicado = precioAplicado;
     }
 
     public double calcularSubtotal() {
         return precioAplicado;
     }
-
-    public ServicioAdicional getServicio() { return servicio; }
-    public double getPrecioAplicado() { return precioAplicado; }
 }
