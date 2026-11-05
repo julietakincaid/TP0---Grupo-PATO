@@ -13,10 +13,10 @@ public abstract class Personal {
         this.telefono = telefono;
     }
 
-    /** Cada tipo de personal informa su rol (método sobreescrito en las subclases). */
+    
     public abstract String getRol();
 
-    /** El legajo es la identidad del empleado y no se modifica. */
+   
     public void actualizarDatos(String nombre, String documento, String telefono) {
         this.nombre = nombre;
         this.documento = documento;
