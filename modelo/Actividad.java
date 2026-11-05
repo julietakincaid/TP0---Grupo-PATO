@@ -10,6 +10,7 @@ public class Actividad {
     private LocalTime horario;
     private String descripcion;
     private String lugar;
+    private Proveedor proveedor;
 
     public Actividad(int dia, int orden, TipoActividad tipo, LocalTime horario, String descripcion, String lugar) {
         setDia(dia);
@@ -72,5 +73,13 @@ public class Actividad {
 
     public void setLugar(String lugar) {
         this.lugar = lugar;
+    }
+
+    public Proveedor getProveedor() {
+        return proveedor;
+    }
+
+    public void setProveedor(Proveedor proveedor) {
+        this.proveedor = proveedor;
     }
 }
