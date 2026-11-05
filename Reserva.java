@@ -1,5 +1,5 @@
 package modelo;
-//FIJARSE Y COMPLETAR
+
 import modelo.enums.EstadoReserva;
 import modelo.enums.EstadoSalida;
 import modelo.enums.MedioPago;
@@ -59,6 +59,7 @@ public class Reserva {
             validarPasajero(p, pasajeros);
             pasajeros.add(p);
         }
+        salida.agregarReserva(this);
     }
 
 
@@ -236,7 +237,7 @@ public class Reserva {
                         + pasajero.getDocumento() + " ya está en la reserva.");
             }
         }
-        if (!salida.getTour().cumpleCondiciones(pasajero)) {
+        if (!salida.getTour().cumpleCondiciones(pasajero, salida.getFechaInicio())) {
             throw new IllegalArgumentException("El pasajero " + pasajero.getDocumento()
                     + " no cumple las condiciones del tour.");
         }
