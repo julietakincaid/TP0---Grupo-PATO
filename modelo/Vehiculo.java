@@ -42,12 +42,12 @@ public class Vehiculo {
         this.capacidad = capacidad;
     }
 
-    /** RN09: la capacidad del vehículo no puede ser menor que el cupo de la salida. */
+    
     public boolean tieneCapacidad(int cupo) {
         return capacidad >= cupo;
     }
 
-    /** S14: un vehículo tampoco puede estar en dos salidas superpuestas. */
+   
     public boolean estaDisponible(LocalDate inicio, LocalDate fin) {
         if (inicio == null || fin == null || inicio.isAfter(fin)) {
             throw new IllegalArgumentException("El rango de fechas es inválido.");
