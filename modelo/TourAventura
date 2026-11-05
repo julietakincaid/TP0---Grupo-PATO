@@ -1,0 +1,39 @@
+package modelo;
+
+import modelo.enums.CategoriaTour;
+
+import java.time.LocalDate;
+
+public class TourAventura extends Tour{
+    private int edadMinima;
+    private String nivelDificultad;
+
+    public TourAventura(String codigo, String nombre, String descripcion, int duracionDias, int cupoMinimo, int cupoMaximo, int edadMinima, String nivelDificultad) {
+        super(codigo, nombre, descripcion, duracionDias, CategoriaTour.AVENTURA, cupoMinimo, cupoMaximo);
+        setEdadMinima(edadMinima);
+        this.nivelDificultad = nivelDificultad;
+    }
+
+    public int getEdadMinima() {
+        return edadMinima;
+    }
+
+    public String getNivelDificultad() {
+        return nivelDificultad;
+    }
+
+    public void setEdadMinima(int edadMinima) {
+        if (edadMinima < 0) {
+            throw new IllegalArgumentException("La edad mínima no puede ser negativa.");
+        }
+        this.edadMinima = edadMinima;
+    }
+
+    public void setNivelDificultad(String nivelDificultad) {
+        this.nivelDificultad = nivelDificultad;
+    }
+
+    public boolean cumpleCondiciones(Pasajero pasajero, LocalDate fechaSalida) {
+        return pasajero.calcularEdad(fechaSalida) >= edadMinima;
+    }
+}
