@@ -24,7 +24,7 @@ public class Salida {
 
     private Guia guia;
     private Vehiculo vehiculo;
-    private final List<Reserva> reservas = new ArrayList<>();   // 0..* (composición)
+    private final List<Reserva> reservas = new ArrayList<>();   
     private LiquidacionGuia liquidacion;
 
     public Salida(int numero, LocalDate fechaInicio, LocalDate fechaFin, int cupoMinimo, int cupoMaximo, Tour tour) {
