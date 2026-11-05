@@ -1,21 +1,13 @@
 package modelo;
 
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.time.Period;
 
 import modelo.enums.TipoPasajero;
 
 public class Pasajero {
-
-    // Porcentajes de la tarifa base (RN10 / RF12)
-    private static final double PORC_MENOR_3 = 0.0;
-    private static final double PORC_MENOR_12 = 0.6;
-    private static final double PORC_JUBILADO = 0.9;
-    private static final double PORC_COMPLETA = 1.0;
-
     private String nombre;
     private String apellido;
     private String documento;
@@ -24,99 +16,104 @@ public class Pasajero {
     private String contactoEmergencia;
     private String restriccionesSalud;
     private String restriccionesAlimentarias;
-    private final List<ServicioContratado> servicios = new ArrayList<>();
+    private List<ServicioContratado> serviciosContratados;
 
-    public Pasajero(String nombre, String apellido, String documento,
-                    LocalDate fechaNacimiento, TipoPasajero tipo,
-                    String contactoEmergencia, String restriccionesSalud,
-                    String restriccionesAlimentarias) {
-        if (nombre == null || nombre.isBlank() || apellido == null || apellido.isBlank()) {
-            throw new IllegalArgumentException("Nombre y apellido son obligatorios.");
-        }
-        if (documento == null || documento.isBlank()) {
-            throw new IllegalArgumentException("El documento es obligatorio.");
-        }
-        if (fechaNacimiento == null || fechaNacimiento.isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("La fecha de nacimiento es inválida.");
-        }
-        if (tipo == null) {
-            throw new IllegalArgumentException("El tipo de pasajero es obligatorio.");
-        }
-        if (contactoEmergencia == null || contactoEmergencia.isBlank()) {
-            throw new IllegalArgumentException("El contacto de emergencia es obligatorio.");
-        }
+    public Pasajero(String nombre, String apellido, String documento, LocalDate fechaNacimiento, TipoPasajero tipo, String contactoEmergencia, String restriccionesSalud, String restriccionesAlimentarias) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.documento = documento;
-        this.fechaNacimiento = fechaNacimiento;
+        setFechaNacimiento(fechaNacimiento);
         this.tipo = tipo;
         this.contactoEmergencia = contactoEmergencia;
-        this.restriccionesSalud = restriccionesSalud == null ? "" : restriccionesSalud;
-        this.restriccionesAlimentarias = restriccionesAlimentarias == null ? "" : restriccionesAlimentarias;
+        this.restriccionesSalud = restriccionesSalud;
+        this.restriccionesAlimentarias = restriccionesAlimentarias;
+        this.serviciosContratados = new ArrayList<>();
     }
 
-
-    public int calcularEdad(LocalDate fechaSalida) {
-        if (fechaSalida == null || fechaSalida.isBefore(fechaNacimiento)) {
-            throw new IllegalArgumentException("La fecha de salida es inválida.");
-        }
-        return Period.between(fechaNacimiento, fechaSalida).getYears();
+    public String getNombre() {
+        return nombre;
     }
 
-
-    public double calcularPrecio(double tarifa, LocalDate fechaSalida) {
-        if (tarifa < 0) {
-            throw new IllegalArgumentException("La tarifa no puede ser negativa.");
-        }
-        int edad = calcularEdad(fechaSalida);
-        if (edad < 3) {
-            return tarifa * PORC_MENOR_3;
-        }
-        if (edad < 12) {
-            return tarifa * PORC_MENOR_12;
-        }
-        if (tipo == TipoPasajero.JUBILADO) {
-            return tarifa * PORC_JUBILADO;
-        }
-        return tarifa * PORC_COMPLETA;
+    public String getApellido() {
+        return apellido;
     }
 
-    public void agregarServicio(ServicioAdicional servicio) {
-        servicios.add(new ServicioContratado(servicio));
+    public String getDocumento() {
+        return documento;
     }
 
-    public double calcularTotalServicios() {
-        double total = 0;
-        for (ServicioContratado s : servicios) {
-            total += s.calcularSubtotal();
+    public LocalDate getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public TipoPasajero getTipo() {
+        return tipo;
+    }
+
+    public String getContactoEmergencia() {
+        return contactoEmergencia;
+    }
+
+    public String getRestriccionesSalud() {
+        return restriccionesSalud;
+    }
+
+    public String getRestriccionesAlimentarias() {
+        return restriccionesAlimentarias;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public void setDocumento(String documento) {
+        this.documento = documento;
+    }
+
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
+        if (fechaNacimiento == null || fechaNacimiento.isAfter(LocalDate.now())) {
+
+            throw new IllegalArgumentException("La fecha de nacimiento no puede ser nula ni futura.");
         }
-        return total;
+        this.fechaNacimiento = fechaNacimiento;
     }
 
-    public boolean tieneServicio(modelo.enums.TipoServicioAdicional tipoServicio) {
-        for (ServicioContratado s : servicios) {
-            if (s.getServicio().getTipo() == tipoServicio) {
-                return true;
+    public void setTipo(TipoPasajero tipo) {
+        this.tipo = tipo;
+    }
+
+    public void setContactoEmergencia(String contactoEmergencia) {
+        this.contactoEmergencia = contactoEmergencia;
+    }
+
+    public void setRestriccionesSalud(String restriccionesSalud) {
+        this.restriccionesSalud = restriccionesSalud;
+    }
+
+    public void setRestriccionesAlimentarias(
+            String restriccionesAlimentarias) {
+        this.restriccionesAlimentarias = restriccionesAlimentarias;
+    }
+
+    public void agregarServicio(ServicioAdicional servicioAdicional) {
+        for (ServicioContratado servicio : serviciosContratados) {
+            if (servicio.getServicioAdicional() == servicioAdicional) {
+                throw new IllegalArgumentException("El pasajero ya tiene contratado este servicio.");
             }
         }
-        return false;
+        ServicioContratado nuevo = new ServicioContratado(servicioAdicional, servicioAdicional.getPrecio());
+        serviciosContratados.add(nuevo);
     }
 
-    public List<ServicioContratado> getServicios() {
-        return Collections.unmodifiableList(servicios);
+    public List<ServicioContratado> getServiciosContratados() {
+        return new ArrayList<>(serviciosContratados);
     }
 
-    public String getNombre() { return nombre; }
-    public String getApellido() { return apellido; }
-    public String getDocumento() { return documento; }
-    public LocalDate getFechaNacimiento() { return fechaNacimiento; }
-    public TipoPasajero getTipo() { return tipo; }
-    public String getContactoEmergencia() { return contactoEmergencia; }
-    public String getRestriccionesSalud() { return restriccionesSalud; }
-    public String getRestriccionesAlimentarias() { return restriccionesAlimentarias; }
-
-    @Override
-    public String toString() {
-        return apellido + ", " + nombre + " (" + documento + ")";
+    public int calcularEdad(LocalDate fechaReferencia) {
+        return Period.between(fechaNacimiento, fechaReferencia).getYears();
     }
 }
