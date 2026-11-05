@@ -1,24 +1,12 @@
-package modelo;
-
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
+package servicio;
 
 public class PromocionAnticipada extends Promocion {
-
     public PromocionAnticipada() {
-        super("Reserva anticipada", 0.15);
+        super("Reserva anticipada", 15);
     }
 
     @Override
-    public boolean esAplicable(
-            LocalDate fechaReserva,
-            LocalDate fechaSalida,
-            int cantidadPasajeros
-    ) {
-        long diasAnticipacion = ChronoUnit.DAYS.between(
-                fechaReserva, fechaSalida
-        );
-
+    public boolean esAplicable(int cantidadPasajeros, int diasAnticipacion) {
         return diasAnticipacion > 60;
     }
 }
