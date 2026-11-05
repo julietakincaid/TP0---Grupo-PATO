@@ -1,12 +1,12 @@
+package servicio;
 
-package modelo;
-
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import servicio.Promocion;
+import servicio.PromocionAnticipada;
+import servicio.PromocionGrupo;
 
 public class GestorPromociones implements CalculadorPromociones {
-
     private List<Promocion> promociones;
 
     public GestorPromociones() {
@@ -16,41 +16,27 @@ public class GestorPromociones implements CalculadorPromociones {
         promociones.add(new PromocionGrupo());
     }
 
-    public void agregarPromocion(Promocion promocion) {
-        if (promocion == null) {
-            throw new IllegalArgumentException(
-                    "La promocion no puede ser nula."
-            );
-        }
+    public List<Promocion> getPromociones() {
+        return new ArrayList<>(promociones);
+    }
 
+    public void agregarPromocion(Promocion promocion) {
+        if (promociones.contains(promocion)) {
+            throw new IllegalArgumentException("La promocion ya esta registrada.");
+        }
         promociones.add(promocion);
     }
 
     @Override
-    public double calcularMejorDescuento(
-            LocalDate fechaReserva,
-            LocalDate fechaSalida,
-            int cantidadPasajeros,
-            double subtotal
-    ) {
-        double mayorDescuento = 0;
-
+    public double obtenerMejorDescuento(int cantidadPasajeros, int diasAnticipacion) {
+        double mejorDescuento = 0;
         for (Promocion promocion : promociones) {
-
-            if (promocion.esAplicable(
-                    fechaReserva,
-                    fechaSalida,
-                    cantidadPasajeros
-            )) {
-                double descuento =
-                        promocion.calcularDescuento(subtotal);
-
-                if (descuento > mayorDescuento) {
-                    mayorDescuento = descuento;
+            if (promocion.esAplicable(cantidadPasajeros, diasAnticipacion)) {
+                if (promocion.getPorcentajeDescuento() > mejorDescuento) {
+                    mejorDescuento = promocion.getPorcentajeDescuento();
                 }
             }
         }
-
-        return mayorDescuento;
+        return mejorDescuento;
     }
 }
