@@ -1,6 +1,7 @@
 
 package servicio;
 
+import modelo.Reserva;
 import modelo.enums.TipoPasajero;
 
 public class CalculadoraPrecioReserva {
@@ -66,30 +67,29 @@ public class CalculadoraPrecioReserva {
     }
 
     public double calcularPrecioConDescuento(
-            double subtotal,
-            int cantidadPasajeros,
-            int diasAnticipacion) {
+            Reserva reserva,
+            double subtotal) {
+
+        if (reserva == null) {
+            throw new IllegalArgumentException(
+                    "La reserva no puede ser nula.");
+        }
 
         if (subtotal < 0) {
             throw new IllegalArgumentException(
                     "El subtotal no puede ser negativo.");
         }
 
-        if (cantidadPasajeros <= 0) {
-            throw new IllegalArgumentException(
-                    "La cantidad de pasajeros debe ser positiva.");
-        }
-
-        if (diasAnticipacion < 0) {
-            throw new IllegalArgumentException(
-                    "Los días de anticipación no pueden ser negativos.");
-        }
-
-        double descuento = calculadorPromociones.obtenerMejorDescuento(
-                cantidadPasajeros,
-                diasAnticipacion
+        double descuento = calculadorPromociones.calcularMejorDescuento(
+                reserva,
+                subtotal
         );
 
-        return aplicarDescuento(subtotal, descuento);
+        if (descuento < 0 || descuento > subtotal) {
+            throw new IllegalStateException(
+                    "El descuento calculado no es válido.");
+        }
+
+        return subtotal - descuento;
     }
 }
