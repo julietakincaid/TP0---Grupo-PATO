@@ -1,9 +1,6 @@
-
 package controlador;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-
+import modelo.Reserva;
 import servicio.CalculadoraPrecioReserva;
 import servicio.CalculadorPromociones;
 import servicio.GestorPromociones;
@@ -18,32 +15,28 @@ public class ControladorReservas {
     }
 
     public double consultarPrecioFinal(
-            double subtotal,
-            LocalDate fechaReserva,
-            LocalDate fechaSalida,
-            int cantidadPasajeros) {
+            Reserva reserva,
+            double subtotal) {
 
-        if (fechaReserva == null || fechaSalida == null) {
+        if (reserva == null) {
             throw new IllegalArgumentException(
-                    "Las fechas de reserva y salida son obligatorias.");
+                    "La reserva no puede ser nula.");
         }
 
-        if (fechaSalida.isBefore(fechaReserva)) {
+        if (subtotal < 0) {
+            throw new IllegalArgumentException(
+                    "El subtotal no puede ser negativo.");
+        }
+
+        if (reserva.getSalida().getFechaInicio()
+                .isBefore(reserva.getFecha())) {
             throw new IllegalArgumentException(
                     "La fecha de salida no puede ser anterior a la reserva.");
         }
 
-        long dias = ChronoUnit.DAYS.between(
-                fechaReserva,
-                fechaSalida
-        );
-
-        int diasAnticipacion = Math.toIntExact(dias);
-
         return calculadoraPrecio.calcularPrecioConDescuento(
-                subtotal,
-                cantidadPasajeros,
-                diasAnticipacion
+                reserva,
+                subtotal
         );
     }
 }
