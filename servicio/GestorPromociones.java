@@ -1,12 +1,13 @@
+
 package servicio;
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import servicio.Promocion;
-import servicio.PromocionAnticipada;
-import servicio.PromocionGrupo;
+import modelo.Reserva;
 
 public class GestorPromociones implements CalculadorPromociones {
+
     private List<Promocion> promociones;
 
     public GestorPromociones() {
@@ -21,22 +22,55 @@ public class GestorPromociones implements CalculadorPromociones {
     }
 
     public void agregarPromocion(Promocion promocion) {
-        if (promociones.contains(promocion)) {
-            throw new IllegalArgumentException("La promocion ya esta registrada.");
+        if (promocion == null) {
+            throw new IllegalArgumentException(
+                    "La promocion no puede ser nula.");
         }
+
+        if (promociones.contains(promocion)) {
+            throw new IllegalArgumentException(
+                    "La promocion ya esta registrada.");
+        }
+
         promociones.add(promocion);
     }
 
     @Override
-    public double obtenerMejorDescuento(int cantidadPasajeros, int diasAnticipacion) {
-        double mejorDescuento = 0;
+    public double calcularMejorDescuento(Reserva reserva, double subtotal) {
+
+        if (reserva == null) {
+            throw new IllegalArgumentException(
+                    "La reserva no puede ser nula.");
+        }
+
+        if (subtotal < 0) {
+            throw new IllegalArgumentException(
+                    "El subtotal no puede ser negativo.");
+        }
+
+        int cantidadPasajeros = reserva.cantidadPasajeros();
+
+        long dias = ChronoUnit.DAYS.between(
+                reserva.getFecha(),
+                reserva.getSalida().getFechaInicio()
+        );
+
+        int diasAnticipacion = Math.toIntExact(dias);
+
+        double mejorPorcentaje = 0;
+
         for (Promocion promocion : promociones) {
-            if (promocion.esAplicable(cantidadPasajeros, diasAnticipacion)) {
-                if (promocion.getPorcentajeDescuento() > mejorDescuento) {
-                    mejorDescuento = promocion.getPorcentajeDescuento();
+
+            if (promocion.esAplicable(
+                    cantidadPasajeros,
+                    diasAnticipacion)) {
+
+                if (promocion.getPorcentajeDescuento() > mejorPorcentaje) {
+                    mejorPorcentaje = promocion.getPorcentajeDescuento();
                 }
             }
         }
-        return mejorDescuento;
+
+        return subtotal * mejorPorcentaje / 100.0;
     }
 }
