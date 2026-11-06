@@ -57,20 +57,25 @@ public class GestorPromociones implements CalculadorPromociones {
 
         int diasAnticipacion = Math.toIntExact(dias);
 
-        double mejorPorcentaje = 0;
+       
+double mejorPorcentaje = 0;
+Promocion mejorPromocion = null;
 
-        for (Promocion promocion : promociones) {
+for (Promocion promocion : promociones) {
 
-            if (promocion.esAplicable(
-                    cantidadPasajeros,
-                    diasAnticipacion)) {
+    if (promocion.esAplicable(
+            cantidadPasajeros, diasAnticipacion)) {
 
-                if (promocion.getPorcentajeDescuento() > mejorPorcentaje) {
-                    mejorPorcentaje = promocion.getPorcentajeDescuento();
-                }
-            }
+        if (promocion.getPorcentajeDescuento() > mejorPorcentaje) {
+            mejorPorcentaje = promocion.getPorcentajeDescuento();
+            mejorPromocion = promocion;
         }
+    }
+}
 
-        return subtotal * mejorPorcentaje / 100.0;
+reserva.asignarPromocion(mejorPromocion);
+
+return subtotal * mejorPorcentaje / 100.0;
+
     }
 }
