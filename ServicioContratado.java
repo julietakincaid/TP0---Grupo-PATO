@@ -1,30 +1,32 @@
 package modelo;
 
-public class ServicioContratado {
-    private ServicioAdicional servicioAdicional;
-    private double precioAplicado;
+import java.io.Serializable;
 
-    public ServicioContratado(ServicioAdicional servicioAdicional, double precioAplicado) {
+public class ServicioContratado implements Serializable {
+    private final ServicioAdicional servicioAdicional;
+    private final double precioAplicado;
+
+    ServicioContratado(ServicioAdicional servicioAdicional) {
+        if (servicioAdicional == null) {
+            throw new IllegalArgumentException("El servicio adicional no puede ser nulo.");
+        }
         this.servicioAdicional = servicioAdicional;
-        setPrecioAplicado(precioAplicado);
+        this.precioAplicado = servicioAdicional.getPrecio();
     }
 
     public ServicioAdicional getServicioAdicional() {
         return servicioAdicional;
     }
-
     public double getPrecioAplicado() {
         return precioAplicado;
     }
 
-    public void setPrecioAplicado(double precioAplicado) {
-        if (precioAplicado < 0) {
-            throw new IllegalArgumentException("El precio aplicado no puede ser negativo.");
-        }
-        this.precioAplicado = precioAplicado;
-    }
-
     public double calcularSubtotal() {
         return precioAplicado;
+    }
+
+    @Override
+    public String toString() {
+        return servicioAdicional.getNombre() + " - $" + precioAplicado;
     }
 }
