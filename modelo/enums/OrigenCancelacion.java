@@ -2,5 +2,6 @@ package modelo.enums;
 
 public enum OrigenCancelacion {
     CLIENTE,
-    AGENCIA
+    AGENCIA,
+    FALTA_PAGO
 }
