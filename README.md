@@ -267,3 +267,17 @@ Para ejecutarlas desde IntelliJ:
 1. Comprobar que `test` esté marcada como *Test Sources Root*.
 2. Si `@Test` aparece en rojo, parar el cursor encima, apretar `Alt+Enter` y elegir **Add 'JUnit5.x' to classpath** (se hace una sola vez).
 3. Clic derecho sobre la carpeta `test` → **Run 'All Tests'**.
+
+## 9. Documentación
+
+Toda la documentación del trabajo está en la carpeta [`/docs`](docs/):
+
+| Archivo | Contenido |
+|---|---|
+| [Etapa 1 - AgenciaTurismo - Grupo PATO.pdf](docs/Etapa%201%20-%20AgenciaTurismo%20-%20Grupo%20PATO.pdf) | Diseño de la Etapa 1: análisis del enunciado (actores, requerimientos y reglas de negocio), diagrama de casos de uso, diagrama de clases inicial, diagramas de secuencia originales, aplicación de SOLID y GRASP y diagrama de clases final del diseño. |
+| [Informe Final - Grupo PATO.pdf](docs/Informe%20Final%20-%20Grupo%20PATO.pdf) | Informe final de la Etapa 2: cambios respecto del diseño original y su justificación, supuestos adoptados, dificultades encontradas, distribución de tareas, reflexión del grupo y correspondencia entre casos de uso y código. |
+| [Plan_de_pruebas_funcionales.pdf](docs/Plan_de_pruebas_funcionales.pdf) | Plan de pruebas funcionales: 41 casos sobre los casos de uso principales, con datos de entrada, resultado esperado y resultado obtenido. |
+| [diagrama_clases_dominio.pdf](docs/diagrama_clases_dominio.pdf) | Diagrama de clases final del dominio, con atributos, métodos, tipos de relación y cardinalidades. |
+| [diagrama_clases_arquitectura.pdf](docs/diagrama_clases_arquitectura.pdf) | Diagrama de clases final de la arquitectura en capas: vistas, controladores, servicios, repositorio y excepciones. |
+| [secuencia_CU15_crear_reserva.png](docs/secuencia_CU15_crear_reserva.png) | Diagrama de secuencia actualizado del CU15 (Crear reserva), según la ejecución del código final. |
+| [secuencia_CU18_cancelar_reserva.png](docs/secuencia_CU18_cancelar_reserva.png) | Diagrama de secuencia actualizado del CU18 (Cancelar reserva), según la ejecución del código final. |
