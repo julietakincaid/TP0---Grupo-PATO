@@ -267,7 +267,3 @@ Para ejecutarlas desde IntelliJ:
 1. Comprobar que `test` esté marcada como *Test Sources Root*.
 2. Si `@Test` aparece en rojo, parar el cursor encima, apretar `Alt+Enter` y elegir **Add 'JUnit5.x' to classpath** (se hace una sola vez).
 3. Clic derecho sobre la carpeta `test` → **Run 'All Tests'**.
-
-### Plan de pruebas funcionales
-
-Los casos de prueba funcionales (dato de entrada, resultado esperado y resultado obtenido) están en `/docs`.
