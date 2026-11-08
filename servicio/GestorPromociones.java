@@ -1,81 +1,53 @@
-
 package servicio;
 
-import java.time.temporal.ChronoUnit;
+import excepcion.ReglaNegocioException;
+import modelo.Promocion;
+import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
-import modelo.Reserva;
 
-public class GestorPromociones implements CalculadorPromociones {
-
+public class GestorPromociones implements CalculadorPromociones, Serializable {
     private List<Promocion> promociones;
 
     public GestorPromociones() {
         promociones = new ArrayList<>();
-
-        promociones.add(new PromocionAnticipada());
-        promociones.add(new PromocionGrupo());
     }
 
     public List<Promocion> getPromociones() {
         return new ArrayList<>(promociones);
     }
 
-    public void agregarPromocion(Promocion promocion) {
+    public void agregarPromocion(Promocion promocion) throws ReglaNegocioException {
         if (promocion == null) {
-            throw new IllegalArgumentException(
-                    "La promocion no puede ser nula.");
+            throw new IllegalArgumentException("La promoción no puede ser nula.");
         }
-
         if (promociones.contains(promocion)) {
-            throw new IllegalArgumentException(
-                    "La promocion ya esta registrada.");
+            throw new ReglaNegocioException("La promoción ya está registrada.");
         }
-
         promociones.add(promocion);
     }
 
-    @Override
-    public double calcularMejorDescuento(Reserva reserva, double subtotal) {
-
-        if (reserva == null) {
-            throw new IllegalArgumentException(
-                    "La reserva no puede ser nula.");
+    public void quitarPromocion(Promocion promocion) throws ReglaNegocioException {
+        if (promocion == null) {
+            throw new IllegalArgumentException("La promoción no puede ser nula.");
         }
-
-        if (subtotal < 0) {
-            throw new IllegalArgumentException(
-                    "El subtotal no puede ser negativo.");
-        }
-
-        int cantidadPasajeros = reserva.cantidadPasajeros();
-
-        long dias = ChronoUnit.DAYS.between(
-                reserva.getFecha(),
-                reserva.getSalida().getFechaInicio()
-        );
-
-        int diasAnticipacion = Math.toIntExact(dias);
-
-       
-double mejorPorcentaje = 0;
-Promocion mejorPromocion = null;
-
-for (Promocion promocion : promociones) {
-
-    if (promocion.esAplicable(
-            cantidadPasajeros, diasAnticipacion)) {
-
-        if (promocion.getPorcentajeDescuento() > mejorPorcentaje) {
-            mejorPorcentaje = promocion.getPorcentajeDescuento();
-            mejorPromocion = promocion;
+        if (!promociones.remove(promocion)) {
+            throw new ReglaNegocioException("La promoción no está registrada.");
         }
     }
-}
 
-reserva.asignarPromocion(mejorPromocion);
+    @Override
+    public Promocion obtenerMejorPromocion(int cantidadPasajeros, int diasAnticipacion) {
+        Promocion mejor = null;
 
-return subtotal * mejorPorcentaje / 100.0;
-
+        for (Promocion promocion : promociones) {
+            if (promocion.esAplicable(cantidadPasajeros, diasAnticipacion)) {
+                if (mejor == null || promocion.getPorcentajeDescuento() > mejor.getPorcentajeDescuento()) {
+                    mejor = promocion;
+                }
+            }
+        }
+        return mejor;
     }
 }
