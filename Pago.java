@@ -2,59 +2,95 @@ package modelo;
 
 import java.time.LocalDate;
 import modelo.enums.MedioPago;
+import java.io.Serializable;
 
-public class Pago {
-    private static final double RECARGO_TARJETA_CUOTAS = 0.07;
+public class Pago implements Serializable {
+    private static final double RECARGO_TARJETA = 0.07;
 
-    private final int numero;
-    private final LocalDate fecha;
-    private final double importe;
-    private final MedioPago medioPago;
-    private final int cantidadCuotas;
+    private int numero;
+    private LocalDate fecha;
+    private double importe;
+    private MedioPago medioPago;
+    private int cantidadCuotas;
 
     Pago(int numero, LocalDate fecha, double importe, MedioPago medioPago, int cantidadCuotas) {
+        setNumero(numero);
+        setFecha(fecha);
+        setImporte(importe);
+        setMedioPago(medioPago);
+        setCantidadCuotas(cantidadCuotas);
+    }
+
+    public int getNumero() {
+        return numero;
+    }
+    public LocalDate getFecha() {
+        return fecha;
+    }
+    public double getImporte() {
+        return importe;
+    }
+    public MedioPago getMedioPago() {
+        return medioPago;
+    }
+    public int getCantidadCuotas() {
+        return cantidadCuotas;
+    }
+
+    private void setNumero(int numero) {
         if (numero <= 0) {
-            throw new IllegalArgumentException("El número de pago debe ser positivo.");
+            throw new IllegalArgumentException("El numero de pago debe ser positivo.");
         }
+        this.numero = numero;
+    }
+
+    private void setFecha(LocalDate fecha) {
         if (fecha == null) {
-            throw new IllegalArgumentException("La fecha del pago es obligatoria.");
+            throw new IllegalArgumentException("La fecha de pago es obligatoria.");
         }
-        if (importe <= 0) {
+        this.fecha = fecha;
+    }
+
+    private void setImporte(double importe) {
+        if (!Double.isFinite(importe) || importe <= 0) {
             throw new IllegalArgumentException("El importe debe ser mayor a cero.");
         }
+        this.importe = importe;
+    }
+
+    private void setMedioPago(MedioPago medioPago) {
         if (medioPago == null) {
             throw new IllegalArgumentException("El medio de pago es obligatorio.");
         }
-        if (cantidadCuotas < 1) {
-            throw new IllegalArgumentException("La cantidad de cuotas debe ser al menos 1.");
-        }
-        if (cantidadCuotas > 1 && medioPago != MedioPago.TARJETA) {
-            throw new IllegalArgumentException("Solo se puede pagar en cuotas con tarjeta.");
-        }
-        this.numero = numero;
-        this.fecha = fecha;
-        this.importe = importe;
         this.medioPago = medioPago;
+    }
+
+    private void setCantidadCuotas(int cantidadCuotas) {
+        if (cantidadCuotas <= 0) {
+            throw new IllegalArgumentException("La cantidad de cuotas debe ser positiva.");
+        }
         this.cantidadCuotas = cantidadCuotas;
     }
 
-
-    public boolean aplicaRecargo() {
-        return medioPago == MedioPago.TARJETA && cantidadCuotas > 1;
-    }
-
     public double calcularRecargo() {
-        return aplicaRecargo() ? importe * RECARGO_TARJETA_CUOTAS : 0;
+        if (medioPago == MedioPago.TARJETA && cantidadCuotas > 1) {
+            return redondear(importe * RECARGO_TARJETA);
+        }
+        return 0;
     }
 
-
-    public double calcularImporteFinal() {
-        return importe + calcularRecargo();
+    // lo que realmente se le cobra al cliente: importe más recargo
+    public double calcularTotalPago() {
+        return redondear(importe + calcularRecargo());
     }
 
-    public int getNumero() { return numero; }
-    public LocalDate getFecha() { return fecha; }
-    public double getImporte() { return importe; }
-    public MedioPago getMedioPago() { return medioPago; }
-    public int getCantidadCuotas() { return cantidadCuotas; }
+    private double redondear(double valor) {
+        return Math.round(valor * 100.0) / 100.0;
+    }
+
+    @Override
+    public String toString() {
+        return "Pago N° " + numero + " (" + fecha + ") - $" + importe + " por " + medioPago
+                + (cantidadCuotas > 1 ? " en " + cantidadCuotas + " cuotas" : "");
+    }
 }
